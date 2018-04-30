@@ -1,0 +1,35 @@
+body {
+	background-image: url(image.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	/*font-family: SignPainter;*/
+	font-size: 20pt;
+	font-weight: bold;
+	color: #DCD8CF;
+	margin-left: 40pt;
+	
+}
+
+h1{
+	/*font-family: SignPainter;*/
+	font-size: 40pt;
+	color: black;
+	margin-left: 0pt;
+}
+
+button {
+	font-size: 15pt;
+	border-radius: 12pt;
+	background-color: #E25D33;
+	padding: 2pt;
+
+}
+
+p {
+	color: #DCD8CF;
+}
+#post {
+	float: left;
+}
+
+

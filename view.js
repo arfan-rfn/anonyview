@@ -132,17 +132,29 @@
 				request.appendChild(home);
 				home.onclick = show;
 
-				var title_div = document.createElement('h1');
+				var title_div = document.createElement('h2');
 				var title = document.createTextNode(data.title);
 				title_div.appendChild(title);
 				request.appendChild(title_div);
 
-				var rating_div = document.createElement('h2');
+				var rating_div = document.createElement('h3');
 				var rating = document.createTextNode("Rating: "+data.rating);
 				rating_div.appendChild(rating);
 				request.appendChild(rating_div);
 
-				var post_div = document.createElement('h3');
+				for (var i  = 1; i < 6; i++) {
+					var rate_button = document.createElement('BUTTON');
+					var rate = document.createTextNode(i);
+					rate_button.appendChild(rate);
+					rate_button.id=i;
+					req.appendChild(rate_button);
+
+				}
+				
+				alert(rate_button.id);
+				//rate_button.onclick = function() {post_rating(data._id, document.getElementById('comment').value)};
+
+				var post_div = document.createElement('h4');
 				var post = document.createTextNode(data.post);
 				post_div.appendChild(post);
 				request.appendChild(post_div);
@@ -158,13 +170,18 @@
 				comment_button.appendChild(comment_button1);
 				request.appendChild(comment_button);
 				//console.log(data._id);
-				comment_button.onclick = function() {post_comment(data._id, comment)};
+				comment_button.onclick = function() {post_comment(data._id, document.getElementById('comment').value)};
 
-				var prev_cmnt = document.createElement('h4');
+
+				var prev_cmnt = document.createElement('h5');
 				for (var i = 0; i < data.comment.length; i++) {
+					console.log()
+					var break_ = document.createElement("br")
 					var cmnt_text = document.createTextNode(data.comment[i]);
 					prev_cmnt.appendChild(cmnt_text);
+					prev_cmnt.appendChild(break_);
 					request.appendChild(prev_cmnt);
+
 				}
 
 
@@ -190,9 +207,48 @@
 
 
 	function post_comment(_id, _comment) {
-		var data = {};
+		//alert(_comment);
+		console.log(_id, _comment);
+		const data = {};
 		data["id"] = _id;
 		data["comment"] = _comment;
+
+
+
+		const fetchOptions = {
+		method : 'POST',
+		headers : {
+			'Accept': 'application/json',
+			'Content-Type' : 'application/json'
+		},
+		body : JSON.stringify(data)
+		};
+
+		var url = "http://localhost:3000/update_comment";
+
+		// This fetch gets the total number of voters and prints it
+		fetch(url, fetchOptions)
+			.then(checkStatus)
+			.then(function(responseText) {
+				console.log(responseText);
+				document.getElementById("req").innerHTML = "Comment posted successfully";
+				//window.location.href = "view.html"				
+			})
+			.catch(function(error) {
+				console.log(error);
+   		});
+		//console.log(x)
+	}
+
+
+	function post_rating(_id, _rating) {
+		//alert(_comment);
+		console.log(_id, _rating);
+		const data = {};
+		data["id"] = _id;
+		data["rating"] = _rating;
+
+
 
 		const fetchOptions = {
 		method : 'POST',
