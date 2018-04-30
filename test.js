@@ -1,31 +1,45 @@
-// Allison Obourn
-// CSC 337, Spring 2018
-// Lecture 28
+window.onload=function(){
+    'use strict';
 
-// server that accepts a post request from the client and saves the 
-// text the client sends at the bottom of the comments file and sends 
-// back a confirmation that it was successful
+    this.console.log("hello world");
+	var message = {};
+    message["id"] = '5ae66b7a5f075b15b204a91a';
+    message["comment"] = 'aaa aaaaa a aaaa a a a a a a a a a a  a a a a a a aa ';
+    
 
-const express = require("express");
-const fs = require("fs");
-const app = express();
+	const fetchOptions = {
+		method : 'POST',
+		headers : {
+			'Accept': 'application/json',
+			'Content-Type' : 'application/json'
+		},
+		body : JSON.stringify(message)
+	};
 
-app.use(express.static('public'));
 
-// so that we can run on the localhost without errors
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", 
-               "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+	var url = "http://localhost:3000/update_comment";
+	fetch(url, fetchOptions)
+		.then(checkStatus)
+		.then(function(responseText) {
+            console.log(responseText);
+            var jsonFile = JSON.parse(responseText);
+			console.log(jsonFile._id);
+		})
+		.catch(function(error) {
+			console.log(error);
+   		});
+}
 
-// allows us to access prameters easily
-const bodyParser = require("body-parser");
-const jsonParser = bodyParser.json();
-
-app.post('/', jsonParser, function (req, res) {
-	res.send("Thank you for submitting the following comment: ");
-})
-
-app.listen(3000);
+// returns the response text if the status is in the 200s
+// otherwise rejects the promise with a message including the status
+function checkStatus(response) {  
+    if (response.status >= 200 && response.status < 300) {  
+        return response.text();
+    } else if (response.status == 404) {
+    	// sends back a different error when we have a 404 than when we have
+    	// a different error
+    	return Promise.reject(new Error("Sorry, we couldn't find that page")); 
+    } else {  
+        return Promise.reject(new Error(response.status+": "+response.statusText)); 
+    } 
+}
