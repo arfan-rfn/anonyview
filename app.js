@@ -74,7 +74,7 @@ app.post('/', jsonParser, function (req, res) {
 
 
 // update the rating of a post when user rate any
-// url: 'localhost:333/update_rating/'
+// url: 'localhost:3000/update_rating/'
 // body-parser perams: @id id of the post
 //                      @rating the new rating value user provided
 // return new rating value
@@ -114,7 +114,7 @@ async function updateRaing(id, rate, collection, res) {
 }   
 
 // add a new comment to a post
-// url: 'localhost:333/update_comment'
+// url: 'localhost:3000/update_comment'
 // body-parser perams: @id id of the post
 //                      @comment comment content
 // res.sent the new comment contant

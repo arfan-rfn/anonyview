@@ -10,7 +10,7 @@ const post = express.Router({mergeParams: true});
 const MONGO_URL = 'mongodb://localhost:27017/';
 
 // get details about a post
-// url: 'localhost:3000/post/$id_of_the_post
+// url: 'localhost:3000/post/$id
 post.route('/:id')
     .get(function(req, res){
         res.header("Access-Control-Allow-Origin", "*");
