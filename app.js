@@ -1,3 +1,6 @@
+// Rubbal Kumar and Md Arfan Uddin
+// CSC 337, Spring 2018
+// Section 2
 const express = require("express");
 
 const MongoClient = require('mongodb').MongoClient;
@@ -146,7 +149,7 @@ async function updateComment(id, newComment, collection, res) {
         if(err){
             res.send("No data found to this id");
         }else{
-            res.send(comment);
+            res.send(newComment);
         }
      });
 }   

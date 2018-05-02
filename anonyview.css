@@ -1,8 +1,14 @@
+/*
+Rubbal Kumar and Md Arfan Uddin
+CSc 337, Spring 2018
+Section 2
+
+Styles for anonyview.html and view.html 
+*/
 body {
 	background-image: url(image.jpg);
 	background-repeat: no-repeat;
 	background-size: cover;
-	/*font-family: SignPainter;*/
 	font-size: 20pt;
 	font-weight: bold;
 	color: #DCD8CF;
@@ -11,7 +17,6 @@ body {
 }
 
 h1{
-	/*font-family: SignPainter;*/
 	font-size: 40pt;
 	color: black;
 	margin-left: 0pt;

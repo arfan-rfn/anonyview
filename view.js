@@ -1,6 +1,15 @@
+// Rubbal Kumar and Md Arfan Uddin
+// CSC 337, Spring 2018
+// Section 2
+
+// This program starts the javascript for the view.html that
+// shows all the comments according to date, category, etc.
+
 (function() {
 
 	"use strict";
+
+	var ID = null;
 
 	window.onload = function() {
 		var x = document.getElementById("req");
@@ -13,6 +22,7 @@
 		document.getElementById('tech').onclick = tech;
 	};
 	
+	// setting the urls according to the request
 
 	function recent() {
 		var url = "http://localhost:3000/update/recent";
@@ -50,6 +60,9 @@
 				
 	}
 
+	// This function sends the fetch request to the server which gets the
+	// data from node.js and adds it to the html page according to
+	// the specified category
 	function requestToServer(url){
 		// resets the page on every click on search button
 		var result = document.getElementById('result');
@@ -71,32 +84,23 @@
 					var post_div =document.createElement("div");
 					post_div.classname = "postdiv"
 
-
 					rec.classname = "result";
 					var title = data[i].title;
 					var rating = data[i].rating;
 					var post = data[i].post;
-					//console.log(data[i].title);
-					//console.log(typeof comment)
+					
 					var title_content = document.createTextNode("Title: "+ title + " Rating: " + rating);
 					var post_content = document.createTextNode("Post: " + post.substr(0, 40));
-					//var text = "Title: "+ title + "\n Post: " + post.substr(0, 40) + "\nRating: " + rating + "\n";
-
-
+					
 					wholeCont.appendChild(title_content);
 					wholeCont.appendChild(post_content);
 					wholeCont.id = data[i]._id;
 
-					//title_div.onclick = clickTitle;
-
-					//console.log(text);
-					//var content = document.createTextNode(text);
 					title_div.appendChild(title_content);
 					post_div.appendChild(post_content);
 					wholeCont.appendChild(title_div);
 					wholeCont.appendChild(post_div)
-					// rec.appendChild(title_div);
-					// rec.appendChild(post_div);
+
 					rec.appendChild(wholeCont);
 					rec.appendChild(br);
 					wholeCont.onclick = clickTitle;
@@ -142,17 +146,17 @@
 				rating_div.appendChild(rating);
 				request.appendChild(rating_div);
 
+				// Creates the rating buttons
 				for (var i  = 1; i < 6; i++) {
 					var rate_button = document.createElement('BUTTON');
 					var rate = document.createTextNode(i);
 					rate_button.appendChild(rate);
 					rate_button.id=i;
+
+					rate_button.onclick = rateing;
 					req.appendChild(rate_button);
 
 				}
-				
-				alert(rate_button.id);
-				//rate_button.onclick = function() {post_rating(data._id, document.getElementById('comment').value)};
 
 				var post_div = document.createElement('h4');
 				var post = document.createTextNode(data.post);
@@ -169,7 +173,8 @@
 				var comment_button1 = document.createTextNode("Comment");
 				comment_button.appendChild(comment_button1);
 				request.appendChild(comment_button);
-				//console.log(data._id);
+
+				ID = data._id;
 				comment_button.onclick = function() {post_comment(data._id, document.getElementById('comment').value)};
 
 
@@ -183,12 +188,6 @@
 					request.appendChild(prev_cmnt);
 
 				}
-
-
-
-
-
-
 							
 			})
 			.catch(function(error) {
@@ -197,6 +196,41 @@
 		console.log()
 	}
 
+	// This function updates the ratings of the post everytime user 
+	// hits the rating buttons
+	function rateing(){
+
+		console.log(ID);
+		const data = {};
+		data["id"] = ID;
+		data["rating"] = this.id;
+
+
+
+		const fetchOptions = {
+		method : 'POST',
+		headers : {
+			'Accept': 'application/json',
+			'Content-Type' : 'application/json'
+		},
+		body : JSON.stringify(data)
+		};
+
+		var url = "http://localhost:3000/update_rating";
+
+		// This fetch post the total number of votes the post has got
+		fetch(url, fetchOptions)
+			.then(checkStatus)
+			.then(function(responseText) {
+				console.log(responseText);			
+			})
+			.catch(function(error) {
+				console.log(error);
+   		});
+	
+	}
+
+	// A helper function to show and hide different divs
 	function show() {
 		var x = document.getElementById("all_con");
 		x.style.display = "block";
@@ -205,7 +239,7 @@
 		request.innerHTML = '';
 	}
 
-
+	// This function posts the comment to the anonymous post 
 	function post_comment(_id, _comment) {
 		//alert(_comment);
 		console.log(_id, _comment);
@@ -231,49 +265,14 @@
 			.then(checkStatus)
 			.then(function(responseText) {
 				console.log(responseText);
-				document.getElementById("req").innerHTML = "Comment posted successfully";
+				//document.getElementById("req").innerHTML = "Comment posted successfully";
 				//window.location.href = "view.html"				
 			})
 			.catch(function(error) {
 				console.log(error);
    		});
-		//console.log(x)
 	}
 
-
-	function post_rating(_id, _rating) {
-		//alert(_comment);
-		console.log(_id, _rating);
-		const data = {};
-		data["id"] = _id;
-		data["rating"] = _rating;
-
-
-
-		const fetchOptions = {
-		method : 'POST',
-		headers : {
-			'Accept': 'application/json',
-			'Content-Type' : 'application/json'
-		},
-		body : JSON.stringify(data)
-		};
-
-		var url = "http://localhost:3000/update_comment";
-
-		// This fetch gets the total number of voters and prints it
-		fetch(url, fetchOptions)
-			.then(checkStatus)
-			.then(function(responseText) {
-				console.log(responseText);
-				document.getElementById("req").innerHTML = "Comment posted successfully";
-				//window.location.href = "view.html"				
-			})
-			.catch(function(error) {
-				console.log(error);
-   		});
-		//console.log(x)
-	}
 
 	// returns the response text if the status is in the 200s
 	// otherwise rejects the promise with a message including the status
